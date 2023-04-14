@@ -9,18 +9,6 @@ import (
 	"strconv"
 )
 
-// ShowAccount godoc
-// @Summary      Show an account
-// @Description  create movie
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
-
 func (h *Handler) createMovie(w http.ResponseWriter, r *http.Request) {
 	reqBytes, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -36,6 +24,15 @@ func (h *Handler) createMovie(w http.ResponseWriter, r *http.Request) {
 	err = h.service.Create(movie)
 }
 
+// GET All Movies
+// @tags GET All Movies
+// @Summary show GET All Movies
+// @Description show GET All Movies
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} server_side.Movie
+// @Failure 404 {object} server_side.Movie
+// @Router /api/v1/movies  [get]
 func (h *Handler) getAllMovies(w http.ResponseWriter, r *http.Request) {
 	items, err := h.service.GetAllMovies()
 	if err != nil {

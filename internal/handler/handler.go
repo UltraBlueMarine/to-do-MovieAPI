@@ -4,8 +4,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/spf13/viper"
-	httpSwagger "github.com/swaggo/http-swagger"
-	_ "server-side/cmd/docs"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 	"server-side/internal/service"
 )
 
@@ -17,16 +16,11 @@ func NewHandler(service *service.Service) *Handler {
 	return &Handler{service: service}
 }
 
-// @host      localhost:8081
-// @BasePath  /api
-
 func (h *Handler) InitHandler() *chi.Mux {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	r.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:"+viper.GetString("port")+"/swagger/doc.json"), //The url pointing to API definition
-	))
-	r.Route("/api", func(r chi.Router) {
+
+	r.Route("/api/v1", func(r chi.Router) {
 		r.Route("/movies", func(r chi.Router) {
 			r.Get("/", h.getAllMovies)
 			r.Post("/", h.createMovie)
@@ -37,6 +31,9 @@ func (h *Handler) InitHandler() *chi.Mux {
 			})
 		})
 	})
+	r.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:"+viper.GetString("port")+"/swagger/doc.json"),
+	))
 
 	return r
 }

@@ -1,0 +1,46 @@
+basePath: /api/v1/
+definitions:
+  server_side.Movie:
+    properties:
+      director:
+        type: string
+      done:
+        type: boolean
+      id:
+        type: integer
+      title:
+        type: string
+      year:
+        type: integer
+    type: object
+host: localhost:8081
+info:
+  contact: {}
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://localhost:8081/terms/
+  title: to-do-Movie API
+  version: "1.0"
+paths:
+  /api/v1/movies:
+    get:
+      consumes:
+      - application/json
+      description: show GET All Movies
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/server_side.Movie'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/server_side.Movie'
+      summary: show GET All Movies
+      tags:
+      - GET All Movies
+swagger: "2.0"
