@@ -15,13 +15,17 @@ func NewTodoItemMovie(db *sql.DB) *TodoItemPostgres {
 	return &TodoItemPostgres{db: db}
 }
 
-func (r *TodoItemPostgres) Create(item server_side.Movie) error {
+func (r *TodoItemPostgres) Create(movie server_side.Movie) error {
 	tx, err := r.db.Begin()
 	if err != nil {
 		return err
 	}
 
-	_, err = tx.Exec("insert into movies1 (title, year, director, done) values ($1, $2, $3, $4)", item.Title, item.Year, item.Director, item.Done)
+	if r.ItemExists(movie) {
+		return errors.New("Item alredy exists!")
+	}
+
+	_, err = tx.Exec("insert into movies1 (title, year, director, done) values ($1, $2, $3, $4)", movie.Title, movie.Year, movie.Director, movie.Done)
 
 	if err != nil {
 		defer tx.Rollback()
@@ -113,4 +117,13 @@ func (r *TodoItemPostgres) DeleteMovieById(id int) error {
 	}
 
 	return nil
+}
+
+func (r *TodoItemPostgres) ItemExists(item server_side.Movie) bool {
+	var exists int
+	err := r.db.QueryRow("select id from movies1 where title=$1 and director=$2", item.Title, item.Director).Scan(&exists)
+	if err != nil {
+		return false
+	}
+	return true
 }

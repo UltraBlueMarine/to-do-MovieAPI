@@ -21,9 +21,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/movies": {
+        "/movies": {
             "get": {
-                "description": "show GET All Movies",
+                "description": "show all movies",
                 "consumes": [
                     "application/json"
                 ],
@@ -33,7 +33,60 @@ const docTemplate = `{
                 "tags": [
                     "GET All Movies"
                 ],
-                "summary": "show GET All Movies",
+                "summary": "show all movies",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/server_side.Movie"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/server_side.Movie"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create movie",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "POST Movie"
+                ],
+                "summary": "create movie",
+                "responses": {
+                    "200": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/movies/id/{id}": {
+            "get": {
+                "description": "show movie by Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GET Movie by Id"
+                ],
+                "summary": "show movie by Id",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -46,6 +99,48 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/server_side.Movie"
                         }
+                    }
+                }
+            },
+            "put": {
+                "description": "update movie by Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UPDATE Movie by Id"
+                ],
+                "summary": "update movie by Id",
+                "responses": {
+                    "200": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "No Content"
+                    }
+                }
+            },
+            "delete": {
+                "description": "delete movie by Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DELETE Movie by Id"
+                ],
+                "summary": "delete movie by Id",
+                "responses": {
+                    "200": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "No Content"
                     }
                 }
             }

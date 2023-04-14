@@ -3,12 +3,23 @@ package handler
 import (
 	"encoding/json"
 	"github.com/go-chi/chi"
+	_ "github.com/swaggo/swag/example/celler/httputil"
 	"io"
 	"net/http"
 	server_side "server-side"
+
 	"strconv"
 )
 
+// POST Movie
+// @tags POST Movie
+// @Summary create movie
+// @Description create movie
+// @Accept  json
+// @Produce  json
+// @Success 200 "No Content"
+// @Failure 404 "No Content"
+// @Router /movies  [POST]
 func (h *Handler) createMovie(w http.ResponseWriter, r *http.Request) {
 	reqBytes, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -20,19 +31,21 @@ func (h *Handler) createMovie(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	err = h.service.Create(movie)
+	if err = h.service.Create(movie); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	
 }
 
 // GET All Movies
 // @tags GET All Movies
-// @Summary show GET All Movies
-// @Description show GET All Movies
+// @Summary show all movies
+// @Description show all movies
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} server_side.Movie
+// @Success 200 {array} server_side.Movie
 // @Failure 404 {object} server_side.Movie
-// @Router /api/v1/movies  [get]
+// @Router /movies  [get]
 func (h *Handler) getAllMovies(w http.ResponseWriter, r *http.Request) {
 	items, err := h.service.GetAllMovies()
 	if err != nil {
@@ -49,6 +62,15 @@ func (h *Handler) getAllMovies(w http.ResponseWriter, r *http.Request) {
 	w.Write(tmp)
 }
 
+// GET Movie by Id
+// @tags GET Movie by Id
+// @Summary show movie by Id
+// @Description show movie by Id
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} server_side.Movie
+// @Failure 404 {object} server_side.Movie
+// @Router /movies/id/{id}  [get]
 func (h *Handler) getMovieByID(w http.ResponseWriter, r *http.Request) {
 	itemId := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(itemId)
@@ -73,6 +95,15 @@ func (h *Handler) getMovieByID(w http.ResponseWriter, r *http.Request) {
 	w.Write(tmp)
 }
 
+// PUT Movie by Id
+// @tags UPDATE Movie by Id
+// @Summary update movie by Id
+// @Description update movie by Id
+// @Accept  json
+// @Produce  json
+// @Success 200 "No Content"
+// @Failure 404 "No Content"
+// @Router /movies/id/{id}  [PUT]
 func (h *Handler) updateMovieByID(w http.ResponseWriter, r *http.Request) {
 	itemId := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(itemId)
@@ -103,6 +134,15 @@ func (h *Handler) updateMovieByID(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusAccepted)
 }
 
+// DELETE Movie by Id
+// @tags DELETE Movie by Id
+// @Summary delete movie by Id
+// @Description delete movie by Id
+// @Accept  json
+// @Produce  json
+// @Success 200 "No Content"
+// @Failure 404 "No Content"
+// @Router /movies/id/{id}  [delete]
 func (h *Handler) deleteMovieByID(w http.ResponseWriter, r *http.Request) {
 	itemId := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(itemId)

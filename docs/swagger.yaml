@@ -24,11 +24,60 @@ info:
   title: to-do-Movie API
   version: "1.0"
 paths:
-  /api/v1/movies:
+  /movies:
     get:
       consumes:
       - application/json
-      description: show GET All Movies
+      description: show all movies
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/server_side.Movie'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/server_side.Movie'
+      summary: show all movies
+      tags:
+      - GET All Movies
+    post:
+      consumes:
+      - application/json
+      description: create movie
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: No Content
+        "404":
+          description: No Content
+      summary: create movie
+      tags:
+      - POST Movie
+  /movies/id/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete movie by Id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: No Content
+        "404":
+          description: No Content
+      summary: delete movie by Id
+      tags:
+      - DELETE Movie by Id
+    get:
+      consumes:
+      - application/json
+      description: show movie by Id
       produces:
       - application/json
       responses:
@@ -40,7 +89,21 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/server_side.Movie'
-      summary: show GET All Movies
+      summary: show movie by Id
       tags:
-      - GET All Movies
+      - GET Movie by Id
+    put:
+      consumes:
+      - application/json
+      description: update movie by Id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: No Content
+        "404":
+          description: No Content
+      summary: update movie by Id
+      tags:
+      - UPDATE Movie by Id
 swagger: "2.0"
